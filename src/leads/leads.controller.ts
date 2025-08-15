@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
   Req,
   Query,
@@ -66,20 +65,5 @@ export class LeadsController {
     @Req() req: RequestWithTenant,
   ) {
     return this.leadsService.update(id, updateLeadDto, req.tenant.id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: RequestWithTenant) {
-    return this.leadsService.remove(id, req.tenant.id);
-  }
-
-  @Get('stages')
-  getStages(@Req() req: RequestWithTenant) {
-    return this.leadsService.getStages(req.tenant.id);
-  }
-
-  @Get('products')
-  getProducts(@Req() req: RequestWithTenant) {
-    return this.leadsService.getProducts(req.tenant.id);
   }
 }

@@ -116,12 +116,6 @@ export class LeadsService {
     });
   }
 
-  remove(id: string, tenantId: string) {
-    return this.prisma.lead.delete({
-      where: { id, tenantId },
-    });
-  }
-
   async findNewLeads(tenantId: string) {
     console.log('findNewLeads', tenantId);
     const leads = await this.prisma.lead.findMany({
@@ -136,24 +130,5 @@ export class LeadsService {
       name: lead.name,
       phone: lead.phone,
     }));
-  }
-
-  async getStages(tenantId: string) {
-    const stages = await this.prisma.lead.findMany({
-      where: { tenantId },
-      select: { stage: true },
-      distinct: ['stage'],
-    });
-    return stages.map((stage) => stage.stage);
-  }
-
-  async getProducts(tenantId: string) {
-    const products = await this.prisma.product.findMany({
-      where: { tenantId },
-      include: {
-        subProducts: true,
-      },
-    });
-    return products;
   }
 }

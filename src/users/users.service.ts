@@ -22,13 +22,36 @@ export class UsersService {
 
   findAll(tenantId: string) {
     return this.prisma.user.findMany({
-      where: { tenantId },
+      where: {
+        tenantId,
+        isActive: true, // Apenas usuários ativos
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
   findOne(id: string, tenantId: string) {
-    return this.prisma.user.findUnique({
-      where: { id, tenantId },
+    return this.prisma.user.findFirst({
+      where: {
+        id,
+        tenantId,
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
@@ -45,13 +68,33 @@ export class UsersService {
 
     return this.prisma.user.update({
       where: { id, tenantId },
-      data: updateUserDto,
+      data: {
+        ...updateUserDto,
+        tenantId: tenantId, // Garante que o tenantId seja sempre atualizado
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
   }
 
+  // Soft delete - marca como inativo
   remove(id: string, tenantId: string) {
-    return this.prisma.user.delete({
+    return this.prisma.user.update({
       where: { id, tenantId },
+      data: { isActive: false },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+        updatedAt: true,
+      },
     });
   }
 }
