@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { LeadStatus } from '@prisma/client';
 
 @Injectable()
 export class DashboardService {
@@ -16,9 +15,7 @@ export class DashboardService {
     });
 
     const totalLeads = leads.length;
-    const convertedLeads = leads.filter(
-      (lead) => lead.status === LeadStatus.CONVERTIDO,
-    );
+    const convertedLeads = leads.filter((lead) => lead.status === 'CONVERTIDO');
     const totalSales = convertedLeads.length;
 
     // Calcular taxa de conversão

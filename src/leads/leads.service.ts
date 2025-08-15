@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { UpdateLeadDto } from './dto/update-lead.dto';
-import { LeadStatus } from '@prisma/client';
 
 @Injectable()
 export class LeadsService {
@@ -79,7 +78,7 @@ export class LeadsService {
     const leads = await this.prisma.lead.findMany({
       where: {
         tenantId,
-        status: LeadStatus.NOVO,
+        status: 'NOVO',
       },
     });
 

@@ -113,4 +113,18 @@ export class RemindersService {
       },
     });
   }
+
+  findByLead(leadId: string, tenantId: string) {
+    return this.prisma.reminder.findMany({
+      where: {
+        leadId,
+        lead: {
+          tenantId,
+        },
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+  }
 }

@@ -7,7 +7,6 @@ import {
   IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { LeadStatus } from '@prisma/client';
 
 class MessageDto {
   @IsString()
@@ -45,8 +44,8 @@ export class CreateLeadDto {
   @IsString()
   company: string;
 
-  @IsEnum(LeadStatus)
-  status: LeadStatus;
+  @IsString()
+  status: string;
 
   @IsString()
   stage: string;

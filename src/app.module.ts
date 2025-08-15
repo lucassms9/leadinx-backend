@@ -10,6 +10,9 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { RemindersModule } from './reminders/reminders.module';
 import { ProductsModule } from './products/products.module';
 import { SubProductsModule } from './subproducts/subproducts.module';
+import { StatusModule } from './status/status.module';
+import { StageModule } from './stage/stage.module';
+import { TemperatureModule } from './temperature/temperature.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { SubProductsModule } from './subproducts/subproducts.module';
     RemindersModule,
     ProductsModule,
     SubProductsModule,
+    StatusModule,
+    StageModule,
+    TemperatureModule,
   ],
   controllers: [AppController],
   providers: [AppService],

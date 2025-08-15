@@ -59,4 +59,9 @@ export class RemindersController {
   markAsCompleted(@Param('id') id: string, @Req() req: RequestWithTenant) {
     return this.remindersService.markAsCompleted(id, req.tenant.id);
   }
+
+  @Get('lead/:leadId')
+  findByLead(@Param('leadId') leadId: string, @Req() req: RequestWithTenant) {
+    return this.remindersService.findByLead(leadId, req.tenant.id);
+  }
 }

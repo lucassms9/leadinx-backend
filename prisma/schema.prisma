@@ -13,12 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum LeadStatus {
-  NOVO
-  EM_CONTATO
-  CONVERTIDO
-}
-
 model Tenant {
   id          String   @id @default(uuid())
   name        String
@@ -35,6 +29,9 @@ model Tenant {
   leads       Lead[]
   products     Product[]
   subProducts SubProduct[]
+  statuses    Status[]
+  stages      Stage[]
+  temperatures Temperature[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -57,7 +54,7 @@ model Lead {
   email         String
   phone         String
   company       String
-  status        LeadStatus @default(NOVO)
+  status        String
   stage         String
   temperature   String
   source        String
@@ -119,4 +116,34 @@ model SubProduct {
   tenant      Tenant     @relation(fields: [tenantId], references: [id])
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+}
+
+model Status {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Stage {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Temperature {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
