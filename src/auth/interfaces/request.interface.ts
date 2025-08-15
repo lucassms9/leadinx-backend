@@ -1,6 +1,9 @@
 import { Request } from 'express';
-import { Tenant } from '@prisma/client';
+import { Tenant, User } from '@prisma/client';
 
 export interface RequestWithTenant extends Request {
-  tenant?: Tenant;
+  tenant: {
+    id: string;
+  };
+  user: User;
 }

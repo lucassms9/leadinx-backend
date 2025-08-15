@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
@@ -28,13 +29,29 @@ export class LeadsController {
 
   @Post()
   create(@Body() createLeadDto: CreateLeadDto, @Req() req: RequestWithTenant) {
-    return this.leadsService.create(createLeadDto, req.tenant.id);
+    return this.leadsService.create(createLeadDto, req.tenant.id, req.user.id);
   }
 
   @Get()
-  findAll(@Req() req: RequestWithTenant) {
+  findAll(
+    @Req() req: RequestWithTenant,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Query('consultantName') consultantName: string,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('stage') stage: string,
+  ) {
     console.log('findNewLeads', req.tenant.id);
-    return this.leadsService.findAll(req.tenant.id);
+    return this.leadsService.findAll(
+      req.tenant.id,
+      page,
+      limit,
+      consultantName,
+      startDate,
+      endDate,
+      stage,
+    );
   }
 
   @Get(':id')
@@ -54,5 +71,15 @@ export class LeadsController {
   @Delete(':id')
   remove(@Param('id') id: string, @Req() req: RequestWithTenant) {
     return this.leadsService.remove(id, req.tenant.id);
+  }
+
+  @Get('stages')
+  getStages(@Req() req: RequestWithTenant) {
+    return this.leadsService.getStages(req.tenant.id);
+  }
+
+  @Get('products')
+  getProducts(@Req() req: RequestWithTenant) {
+    return this.leadsService.getProducts(req.tenant.id);
   }
 }

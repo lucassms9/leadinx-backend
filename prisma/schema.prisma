@@ -37,15 +37,16 @@ model Tenant {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  isActive  Boolean  @default(true)
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password      String
+  isActive      Boolean  @default(true)
+  tenantId      String
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  leadsConsulted Lead[]   // Relação inversa para os leads consultados por este usuário
 }
 
 model Lead {
@@ -67,6 +68,8 @@ model Lead {
   notes         String?
   reminder      DateTime?
   reminderName  String?
+  consultantId  String?
+  consultant    User?     @relation(fields: [consultantId], references: [id])
   messages      Message[]
   reminders     Reminder[]
   tenantId      String

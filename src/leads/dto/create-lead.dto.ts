@@ -56,16 +56,16 @@ export class CreateLeadDto {
   @IsString()
   source: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   sourceSite?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   sourceSocial?: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   sourceVisit?: string;
 
   @IsString()

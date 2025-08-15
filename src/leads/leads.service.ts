@@ -7,11 +7,15 @@ import { UpdateLeadDto } from './dto/update-lead.dto';
 export class LeadsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createLeadDto: CreateLeadDto, tenantId: string) {
+  create(createLeadDto: CreateLeadDto, tenantId: string, userId: string) {
     return this.prisma.lead.create({
       data: {
         ...createLeadDto,
         tenantId,
+        consultantId: userId,
+        sourceSite: createLeadDto.sourceSite,
+        sourceSocial: createLeadDto.sourceSocial,
+        sourceVisit: createLeadDto.sourceVisit,
         messages: createLeadDto.messages && {
           create: createLeadDto.messages,
         },
@@ -26,14 +30,59 @@ export class LeadsService {
     });
   }
 
-  findAll(tenantId: string) {
-    return this.prisma.lead.findMany({
-      where: { tenantId },
-      include: {
-        messages: true,
-        reminders: true,
-      },
-    });
+  async findAll(
+    tenantId: string,
+    page: number = 1,
+    limit: number = 10,
+    consultantName?: string,
+    startDate?: string,
+    endDate?: string,
+    stage?: string,
+  ) {
+    const offset = (page - 1) * limit;
+    const [leads, totalLeads] = await Promise.all([
+      this.prisma.lead.findMany({
+        where: {
+          tenantId,
+          consultant: consultantName
+            ? {
+                is: { name: { contains: consultantName } },
+              }
+            : undefined,
+          createdAt: {
+            gte: startDate ? new Date(startDate) : undefined,
+            lte: endDate ? new Date(endDate) : undefined,
+          },
+          stage: stage ? { equals: stage } : undefined,
+        },
+        include: {
+          messages: true,
+          reminders: true,
+          consultant: true, // Inclui os dados do consultor na resposta
+        },
+        skip: offset,
+        take: Number(limit),
+      }),
+      this.prisma.lead.count({
+        where: {
+          tenantId,
+          consultant: consultantName
+            ? {
+                is: { name: { contains: consultantName } },
+              }
+            : undefined,
+          createdAt: {
+            gte: startDate ? new Date(startDate) : undefined,
+            lte: endDate ? new Date(endDate) : undefined,
+          },
+          stage: stage ? { equals: stage } : undefined,
+        },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(totalLeads / limit);
+
+    return { leads, totalPages };
   }
 
   findOne(id: string, tenantId: string) {
@@ -87,5 +136,24 @@ export class LeadsService {
       name: lead.name,
       phone: lead.phone,
     }));
+  }
+
+  async getStages(tenantId: string) {
+    const stages = await this.prisma.lead.findMany({
+      where: { tenantId },
+      select: { stage: true },
+      distinct: ['stage'],
+    });
+    return stages.map((stage) => stage.stage);
+  }
+
+  async getProducts(tenantId: string) {
+    const products = await this.prisma.product.findMany({
+      where: { tenantId },
+      include: {
+        subProducts: true,
+      },
+    });
+    return products;
   }
 }
