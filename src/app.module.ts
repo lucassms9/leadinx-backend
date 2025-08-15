@@ -8,6 +8,8 @@ import { LeadsModule } from './leads/leads.module';
 import { TenantsModule } from './tenants/tenants.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { RemindersModule } from './reminders/reminders.module';
+import { ProductsModule } from './products/products.module';
+import { SubProductsModule } from './subproducts/subproducts.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { RemindersModule } from './reminders/reminders.module';
     TenantsModule,
     DashboardModule,
     RemindersModule,
+    ProductsModule,
+    SubProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

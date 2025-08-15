@@ -26,13 +26,13 @@ export class RemindersService {
     });
   }
 
-  findTodayReminders(tenantId: string) {
+  async findTodayReminders(tenantId: string) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    return this.prisma.reminder.findMany({
+    const reminders = await this.prisma.reminder.findMany({
       where: {
         lead: {
           tenantId,
@@ -41,7 +41,6 @@ export class RemindersService {
           gte: today,
           lt: tomorrow,
         },
-        completed: false,
       },
       include: {
         lead: true,
@@ -50,6 +49,14 @@ export class RemindersService {
         date: 'asc',
       },
     });
+
+    return reminders.map((reminder) => ({
+      id: reminder.id,
+      name: reminder.name,
+      date: reminder.date,
+      completed: reminder.completed,
+      leadName: reminder.lead.name,
+    }));
   }
 
   findOne(id: string, tenantId: string) {

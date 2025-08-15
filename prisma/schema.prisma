@@ -33,6 +33,8 @@ model Tenant {
   isActive    Boolean  @default(true)
   users       User[]
   leads       Lead[]
+  products     Product[]
+  subProducts SubProduct[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -63,7 +65,7 @@ model Lead {
   sourceSocial  String?
   sourceVisit   String?
   product       String
-  model         String
+  subProduct    String
   value         String
   notes         String?
   reminder      DateTime?
@@ -97,4 +99,24 @@ model Reminder {
   lead      Lead     @relation(fields: [leadId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String       @id @default(uuid())
+  name        String
+  description String
+  tenantId    String
+  tenant      Tenant       @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model SubProduct {
+  id          String     @id @default(uuid())
+  name        String
+  description String
+  tenantId    String
+  tenant      Tenant     @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }

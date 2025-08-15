@@ -73,7 +73,7 @@ export class CreateLeadDto {
   product: string;
 
   @IsString()
-  model: string;
+  subProduct: string; // Renamed from model
 
   @IsString()
   value: string;

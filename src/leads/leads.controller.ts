@@ -20,6 +20,12 @@ import { RequestWithTenant } from '../auth/interfaces/request.interface';
 export class LeadsController {
   constructor(private readonly leadsService: LeadsService) {}
 
+  @Get('new')
+  findNewLeads(@Req() req: RequestWithTenant) {
+    console.log('findNewLeads', req.tenant.id);
+    return this.leadsService.findNewLeads(req.tenant.id);
+  }
+
   @Post()
   create(@Body() createLeadDto: CreateLeadDto, @Req() req: RequestWithTenant) {
     return this.leadsService.create(createLeadDto, req.tenant.id);
@@ -27,6 +33,7 @@ export class LeadsController {
 
   @Get()
   findAll(@Req() req: RequestWithTenant) {
+    console.log('findNewLeads', req.tenant.id);
     return this.leadsService.findAll(req.tenant.id);
   }
 
@@ -47,10 +54,5 @@ export class LeadsController {
   @Delete(':id')
   remove(@Param('id') id: string, @Req() req: RequestWithTenant) {
     return this.leadsService.remove(id, req.tenant.id);
-  }
-
-  @Get('new')
-  findNewLeads(@Req() req: RequestWithTenant) {
-    return this.leadsService.findNewLeads(req.tenant.id);
   }
 }

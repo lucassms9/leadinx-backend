@@ -74,16 +74,19 @@ export class LeadsService {
     });
   }
 
-  findNewLeads(tenantId: string) {
-    return this.prisma.lead.findMany({
+  async findNewLeads(tenantId: string) {
+    console.log('findNewLeads', tenantId);
+    const leads = await this.prisma.lead.findMany({
       where: {
         tenantId,
         status: LeadStatus.NOVO,
       },
-      include: {
-        messages: true,
-        reminders: true,
-      },
     });
+
+    return leads.map((lead) => ({
+      id: lead.id,
+      name: lead.name,
+      phone: lead.phone,
+    }));
   }
 }
